@@ -1,27 +1,27 @@
+```mermaid
 sequenceDiagram
     participant browser
     participant server
-
-    Note over browser: The user writes content into the text field.
-
-    browser->>browser: User clicks the "Save" button
-    Note over browser: The browser collects the input content and prepares a POST request.
-
-    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note
-    Note over server: The server processes the request to create a new note.
-
+    
+    browser->>browser: User types a new note in the text field
+    browser->>browser: User presses the "Save" button
+    
+    Note right of browser: The browser sends the data (new note) to the server.
+    
+    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/notes with { "content": "New note content", "date": "2025-01-14" }
     activate server
-    server-->>browser: Confirmation response (e.g., success or updated note data)
+    
+    server-->>browser: Response with the new note saved (status 200 or similar)
     deactivate server
-
-    Note over browser: The browser updates the page with the new note or a success message.
-
+    
+    Note right of browser: The browser updates the UI to reflect the new note.
+    
+    browser->>browser: Add new note to the list of displayed notes
+    
+    Note right of browser: Optionally, the browser may fetch the updated notes list (JSON) to refresh the view.
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
-    Note over browser: The browser fetches the updated list of notes (including the new note) to re-render the list.
-
     activate server
-    server-->>browser: Updated JSON data with the new note
+    server-->>browser: Return updated list of notes (including the new note)
     deactivate server
-
-    Note over browser: The browser executes the callback function to render the updated list of notes.
-
+    
+    browser->>browser: Render the updated list of notes with the new note included
